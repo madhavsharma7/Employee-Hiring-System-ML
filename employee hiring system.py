@@ -32,12 +32,18 @@ def reg():
     Y=df[['Hired']]
 
     X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.3,random_state=0)
+
+    # Convert Y_train and Y_test DataFrames to 1-dimensional arrays
+    Y_train = Y_train.values.ravel()
+    Y_test = Y_test.values.ravel()
+    
     lr=LogisticRegression()
     lr.fit(X_train,Y_train)
 
+    
     y_pred=lr.predict(X_test)
 
-    acc=metrics.accuracy_score(Y_test,y_pred)*100
+    acc=accuracy_score(Y_test,y_pred)
 
     out1.set(acc)
     out.set(y_pred)
@@ -59,14 +65,14 @@ def sec():
     X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.3,random_state=0)
     clf=DecisionTreeClassifier()
     clf.fit(X_train,Y_train)
+    
     Y_pred=clf.predict(X_test)
 
-    acc=metrics.accuracy_score(Y_test,Y_pred)*100
+    acc=accuracy_score(Y_test,Y_pred)
 
     out1.set(acc)
-    lg=clf.predict(np.array([a,b,c,d,e], dtype="float").reshape(1, -1))
-    print(lg)
-    out.set(lg)
+    print(Y_pred)
+    out.set(Y_pred)
 
     
 frame=Frame(win,bd=10,relief="raised",width=1540,height=50).grid(row=0)
