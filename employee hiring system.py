@@ -6,11 +6,11 @@ from sklearn import*
 from sklearn.metrics import accuracy_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
-import matplotlib.pyplot as plt
+from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier 
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 from sklearn.model_selection import cross_val_score
-from sklearn.metrics import accuracy_score
 
 win=Tk()
 win.config(bg="gray")
@@ -71,12 +71,68 @@ def sec():
     acc=accuracy_score(Y_test,Y_pred)
 
     out1.set(acc)
-    print(Y_pred)
+    #print(Y_pred)
     out.set(Y_pred)
-
+#SVC
+def svcc():
+    df=pd.read_csv("E:\Python codes\hire_data1.csv")
     
+    a=num1.get()
+    b=num2.get()
+    c=num3.get()
+    d=num4.get()
+    e=num5.get()
+
+    features=df.columns[:5]
+    X=df[features]
+    Y=df[['Hired']]
+
+    X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.3,random_state=0)
+    Y_train = Y_train.values.ravel()
+    Y_test = Y_test.values.ravel()
+    
+    svcc=SVC(kernel="linear",random_state=0)
+    svcc.fit(X_train,Y_train)
+
+    pre=svcc.predict(X_test)
+    accu=accuracy_score(Y_test,pre)
+
+    out1.set(accu)
+    print(accu)
+    out.set(pre)
+    print(pre)
+    
+#random forest
+def rf():
+    df=pd.read_csv("E:\Python codes\hire_data1.csv")
+
+    a=num1.get()
+    b=num2.get()
+    c=num3.get()
+    d=num4.get()
+    e=num5.get()
+
+    features=df.columns[:5]
+    X=df[features]
+    Y=df[['Hired']]
+
+    X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.3,random_state=0)
+    Y_train = Y_train.values.ravel()
+    Y_test = Y_test.values.ravel()
+    
+    rff=RandomForestClassifier(n_estimators= 10, criterion="entropy")  
+    rff.fit(X_train,Y_train)
+
+    predi=rff.predict(X_test)
+    score=accuracy_score(Y_test,predi)
+
+    out1.set(score)
+    print(score)
+    out.set(predi)
+    print(predi)
+       
 frame=Frame(win,bd=10,relief="raised",width=1540,height=50).grid(row=0)
-lb=Label(frame,width=150,text="EMPLOYEE HIRING SYSTEM",font=('arial',10,'bold'),fg="Black")
+lb=Label(frame,width=100,text="EMPLOYEE HIRING SYSTEM",font=('arial',15,'bold'),fg="Black")
 lb.grid(row=0)
 frame2=Frame(win,bd=10,relief="raised",width=500,height=400,bg="orange").place(x=560,y=105)
 frame3=Frame(win,bd=9,relief="raised",width=350,height=100,bg="orange").place(x=650 ,y=530)
@@ -113,5 +169,5 @@ tx4=Entry(frame2,textvariable=num5).place(x=750,y=400)
 
 btn=Button(frame2,text="LOGISTIC Reg.",command=reg,font=('arial',10,'bold'),width=15,bd=8,relief="raised").place(x=900,y=190)
 btn2=Button(frame2,text="Decesion Tree",command=sec,font=('arial',10,'bold'),width=15,bd=8,relief="raised").place(x=900,y=240)
-btn2=Button(frame2,text="SVM",font=('arial',10,'bold'),width=15,bd=8,relief="raised").place(x=900,y=290)
-btn3=Button(frame2,text="Random Forest",font=('arial',10,'bold'),width=15,bd=8,relief="raised").place(x=900,y=340)
+btn2=Button(frame2,text="SVM",command=svcc,font=('arial',10,'bold'),width=15,bd=8,relief="raised").place(x=900,y=290)
+btn3=Button(frame2,text="Random Forest",command=rf,font=('arial',10,'bold'),width=15,bd=8,relief="raised").place(x=900,y=340)
